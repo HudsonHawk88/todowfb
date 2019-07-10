@@ -1,18 +1,23 @@
 import React, { Component, Fragment } from "react";
-import fire from "./config/Fire";
+import Error from './autherror';
+import firebase, {auth} from './config/Fire';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
+
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: fire.user,
+      
       formLeiras: "",
       formHatarido: "",
       formFeladat: "",
       formFontos: "Nem",
       todos: [],
-      modal: false
+      modal: false,
+      user: ''
+      
+      
     };
     this.logout = this.logout.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -32,18 +37,24 @@ class Home extends Component {
   };
 
   addTodo = (todo) => {
-    fire.database().ref("todos").push(todo);
+    firebase.database().ref("todos").push(todo);
     this.toggle();
   };
 
   componentDidMount() {
-    const todosRef = fire.database().ref("todos");
-    todosRef.on("value", snapshot => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ user });
+      } 
+    });
+    
+    firebase.database().ref("todos").on("value", snapshot => {
       let todos = snapshot.val();
       let newState = [];
       for (let item in todos) {
         newState.push({
           id: todos[item].id,
+          user: todos[item].user,
           feladat: todos[item].feladat,
           hatarido: todos[item].hatarido,
           leiras: todos[item].leiras,
@@ -59,7 +70,9 @@ class Home extends Component {
 
   
   renderTodoButtons = () => {
+    
     return this.state.todos.map(item => {
+      if (item.user === auth.currentUser.displayName){
       return (
         <Button
           key={this.uuidv4()}
@@ -69,6 +82,7 @@ class Home extends Component {
             this.setState({
             todo: {
               id: item.id,
+              user: item.user,
               feladat: item.feladat,
               hatarido: item.hatarido,
               leiras: item.leiras,
@@ -79,18 +93,26 @@ class Home extends Component {
         >
           {item.feladat}
         </Button>
-      );
+        
+      );}
+   
     });
+    
   };
 
  
 
   removeTodo(id) {
-    fire.database().ref(`/todos/${id}`).remove();
+    firebase.database().ref(`/todos/${id}`).remove();
   }
 
   logout() {
-    fire.auth().signOut();
+    auth.signOut()
+      .then(() => {
+        this.setState({
+          user: null
+        });
+      });
   }
 
   uuidv4 = () => {
@@ -133,10 +155,11 @@ class Home extends Component {
         )}
       </Fragment>
     );
-
+    
   };
 
   render() {
+    
     const { formFeladat, formHatarido, formLeiras, formFontos } = this.state;
     return (
       <Fragment>
@@ -197,6 +220,7 @@ class Home extends Component {
                   onClick={() => {
                     this.addTodo({
                       id: this.uuidv4(),
+                      user: auth.currentUser.displayName,
                       feladat: formFeladat,
                       hatarido: formHatarido,
                       leiras: formLeiras,
@@ -220,7 +244,7 @@ class Home extends Component {
           <div className="row">
             <div className="col" name="teendok" id="teendok">
               <h1>Teendők</h1>
-              <br />
+              <Button color= "info" onClick={this.logout}>Kijelentkezés</Button>
               <h4>
                 {new Date().toLocaleDateString("hu-HU", {
                   weekday: "long",
@@ -237,7 +261,7 @@ class Home extends Component {
                   + Teendő hozzáadása
                 </Button>
                 <br />
-                {this.renderTodoButtons()}
+                {this.state.user === null ? <Error /> : this.renderTodoButtons()}
               </div>
 
               <hr />
@@ -245,7 +269,7 @@ class Home extends Component {
             <div className="col-8">
               <h1>Teendők részletesen</h1>
               <br />
-              <Button onClick={this.logout}>Kijelentkezés</Button>
+              
               <hr />
               <div className="col-14" id="tartalom">
                 {this.renderTodoDetails()}

@@ -1,7 +1,7 @@
 import firebase from 'firebase';
  
  // Your web app's Firebase configuration
-  const firebaseConfig = {
+  const config = {
     apiKey: "AIzaSyAyKbJFjyWqU8S72JGqgk78YgPj0AlPwSU",
     authDomain: "todoapptg.firebaseapp.com",
     databaseURL: "https://todoapptg.firebaseio.com",
@@ -11,6 +11,8 @@ import firebase from 'firebase';
     appId: "1:150398977615:web:04c8e93929ec761b"
   };
   // Initialize Firebase
-  const fire = firebase.initializeApp(firebaseConfig)
+  firebase.initializeApp(config);
   
-  export default fire;
+export const provider = new firebase.auth.GoogleAuthProvider();
+export const auth = firebase.auth();
+export default firebase;
