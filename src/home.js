@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import Error from './autherror';
 import firebase, {auth} from './config/Fire';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
+import { identifier } from "@babel/types";
 
 
 class Home extends Component {
@@ -71,25 +72,28 @@ class Home extends Component {
   
   renderTodoButtons = () => {
     
-    return this.state.todos.map(item => {
+    return this.state.todos.map((item) => {
       if (item.user === auth.currentUser.displayName){
       return (
+        
         <Button
           key={this.uuidv4()}
           block
           color={item.fontos === "Igen" ? "danger" : "primary"}
           onClick={() => {
             this.setState({
-            todo: {
-              id: item.id,
-              user: item.user,
-              feladat: item.feladat,
-              hatarido: item.hatarido,
-              leiras: item.leiras,
-              fontos: item.fontos
-            }
-          })
-            }}
+              
+                id: item.id,
+                feladat: item.feladat,
+                hatarido: item.hatarido,
+                leiras: item.leiras,
+                fontos: item.fontos
+              
+            });
+          }
+          }
+           
+            
         >
           {item.feladat}
         </Button>
@@ -102,8 +106,9 @@ class Home extends Component {
 
  
 
-  removeTodo(id) {
-    firebase.database().ref(`/todos/${id}`).remove();
+  removeTodo(todo) {
+    
+    firebase.database().ref("todos").remove()
   }
 
   logout() {
@@ -124,29 +129,28 @@ class Home extends Component {
   };
 
   renderTodoDetails = () => {
-    const {todos} = this.state;
     return (
       <Fragment>
-        {(
+        {this.state.id && (
           <Fragment>
             <font size="5">
             <br />
             <p><u><b>{"Feladat: "}</b></u></p>
-            {todos.feladat} <br /><br />
+            {this.state.feladat} <br /><br />
             <p><u><b>{"Határidő: "}</b></u></p>
-            {todos.hatarido} <br /><br />
+            {this.state.hatarido} <br /><br />
             <p><u><b>{"Leírás: "}</b></u></p>
-            {todos.leiras} <br /><br />
+            {this.state.leiras} <br /><br />
             <p><u><b>{"Fontos-e? : "}</b></u></p>
-            {todos.fontos} <br /><br />
+            {this.state.fontos} <br /><br />
             <Button
               size="lg"
               outline
               block
               color="danger"
-              onClick={
-                this.removeTodo(todos.id)
-              }
+              onClick={() => {
+                this.removeTodo(this.state.id);
+              }}
             >
               Törlés
             </Button><br /><br />
@@ -156,7 +160,19 @@ class Home extends Component {
       </Fragment>
     );
     
-  };
+}
+
+showUser = () => {
+  var user = auth.currentUser;
+  var name, photo;
+if (user != null) {
+  name = user.displayName;
+  photo = user.photoURL;
+  
+ 
+}
+return (document.getElementById.innerHTML =  name + " teendői:")
+}
 
   render() {
     
@@ -253,6 +269,7 @@ class Home extends Component {
                   day: "numeric"
                 })}
               </h4>
+              <h5>{this.showUser()}</h5>
               <hr />
               <div id="hozzaad" className="col-12" style={{ margin: 0 }} />
               <br />
@@ -269,10 +286,10 @@ class Home extends Component {
             <div className="col-8">
               <h1>Teendők részletesen</h1>
               <br />
-              
+              {this.renderTodoDetails()}
               <hr />
               <div className="col-14" id="tartalom">
-                {this.renderTodoDetails()}
+                
               </div>
             </div>
           </div>
