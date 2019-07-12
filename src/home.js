@@ -40,7 +40,7 @@ class Home extends Component {
   addTodo = (todo) => {
     
      
-    const refTodos = firebase.database().ref("todos").child(todo.feladat);
+    const refTodos = firebase.database().ref("todos").child(todo.id);
     refTodos.push(todo);
     this.componentDidMount();
     this.toggle();
@@ -126,7 +126,7 @@ class Home extends Component {
 
   removeTodo = () => {
     
-     firebase.database().ref('todos').child(this.state.feladat).remove();
+     firebase.database().ref('todos').child(this.state.id).remove();
      let newItems = [];
      this.setState({
        newItems: {
