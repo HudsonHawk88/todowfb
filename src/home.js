@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import Error from './autherror';
 import firebase, {auth} from './config/Fire';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
-import { identifier } from "@babel/types";
 
 
 class Home extends Component {
@@ -16,7 +15,8 @@ class Home extends Component {
       formFontos: "Nem",
       todos: [],
       modal: false,
-      user: ''
+      user: '',
+      
       
       
     };
@@ -38,7 +38,11 @@ class Home extends Component {
   };
 
   addTodo = (todo) => {
-    firebase.database().ref("todos").push(todo);
+    
+     
+    const refTodos = firebase.database().ref("todos").child(todo.feladat);
+    refTodos.push(todo);
+    this.componentDidMount();
     this.toggle();
   };
 
@@ -49,40 +53,56 @@ class Home extends Component {
       } 
     });
     
-    firebase.database().ref("todos").on("value", snapshot => {
+    firebase.database().ref('todos').on('value', snapshot => {
+      let todos1 = [];
       let todos = snapshot.val();
-      let newState = [];
+      snapshot.forEach(snapshot => {
+        todos = snapshot.val();
       for (let item in todos) {
-        newState.push({
+        
+        todos1.push({
           id: todos[item].id,
           user: todos[item].user,
           feladat: todos[item].feladat,
           hatarido: todos[item].hatarido,
           leiras: todos[item].leiras,
           fontos: todos[item].fontos
-        });
+       });
+     
+     
       }
-
-      this.setState({
-        todos: newState
-      });
-    });
+      this.setState({todos: todos1})
+      }
+      
+      );
+    
+    }
+      
+      )
+      
   }
 
+  componentWillUnmount(){
+
+    firebase.database().ref('todos').off();
+  } 
+    
   
   renderTodoButtons = () => {
-    
+ 
+
     return this.state.todos.map((item) => {
       if (item.user === auth.currentUser.displayName){
       return (
         
         <Button
-          key={this.uuidv4()}
+          key={item.id}
+          id={item.id}
           block
           color={item.fontos === "Igen" ? "danger" : "primary"}
           onClick={() => {
             this.setState({
-              
+                key: item.key,
                 id: item.id,
                 feladat: item.feladat,
                 hatarido: item.hatarido,
@@ -92,8 +112,6 @@ class Home extends Component {
             });
           }
           }
-           
-            
         >
           {item.feladat}
         </Button>
@@ -102,14 +120,38 @@ class Home extends Component {
    
     });
     
-  };
+  }
 
  
 
-  removeTodo(todo) {
+  removeTodo = () => {
     
-    firebase.database().ref("todos").remove()
+     firebase.database().ref('todos').child(this.state.feladat).remove();
+     let newItems = [];
+     this.setState({
+       newItems: {
+        id: null,
+        feladat: null,
+        hatarido: null,
+        leiras: null,
+        fontos: null
+       }
+     })
+     this.setState({
+      todos: [this.state.todos, newItems], 
+      id: null,
+      feladat: null,
+      hatarido: null,
+      leiras: null,
+      fontos: null
+
+    });
+    
+    
+     
   }
+  
+  
 
   logout() {
     auth.signOut()
@@ -149,8 +191,9 @@ class Home extends Component {
               block
               color="danger"
               onClick={() => {
-                this.removeTodo(this.state.id);
-              }}
+                this.removeTodo();
+                
+            }}
             >
               Törlés
             </Button><br /><br />
@@ -164,10 +207,10 @@ class Home extends Component {
 
 showUser = () => {
   var user = auth.currentUser;
-  var name, photo;
+  var name;
 if (user != null) {
   name = user.displayName;
-  photo = user.photoURL;
+  
   
  
 }
@@ -278,7 +321,7 @@ return (document.getElementById.innerHTML =  name + " teendői:")
                   + Teendő hozzáadása
                 </Button>
                 <br />
-                {this.state.user === null ? <Error /> : this.renderTodoButtons()}
+                {this.state.user === null  ? <Error /> : this.renderTodoButtons()}
               </div>
 
               <hr />
