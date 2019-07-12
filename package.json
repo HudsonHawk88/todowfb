@@ -1,7 +1,8 @@
 {
-  "name": "todo-fb",
-  "version": "0.1.0",
+  "name": "todowfb",
+  "version": "1.0",
   "private": false,
+  "homepage": "https://hudsonhawk88.github.io/todowfb/",
   "dependencies": {
     "bootstrap": "^4.3.1",
     "firebase": "^6.2.4",
@@ -14,7 +15,7 @@
     "react-scripts": "3.0.1",
     "reactfire": "^1.0.0",
     "reactstrap": "^8.0.0"
-	"homepage": "https://HudsonHawk88.github.io/todowfb",
+	
   },
   "scripts": {
 	"predeploy": "npm run build",
