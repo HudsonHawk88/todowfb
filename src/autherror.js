@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import {Spinner} from 'reactstrap';
 
 class Error extends Component{
 render(){
     return(
-        <div></div>
+        <div><Spinner color="primary" /></div>
         
     )
 }
