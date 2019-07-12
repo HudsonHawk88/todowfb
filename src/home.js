@@ -147,7 +147,7 @@ class Home extends Component {
 
     });
     
-    
+    this.componentDidMount();
      
   }
   
