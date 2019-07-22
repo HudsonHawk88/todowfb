@@ -7,7 +7,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.loginGoogle = this.login.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    
     this.state = {
       email: '',
       password: '',
@@ -15,13 +15,11 @@ class Login extends Component {
     };
   }
 
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
+  
 
   login() {
     var uiConfig ={
-    signInSuccessUrl: <Home />,
+    signInSuccessUrl: 'home.js',
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
           firebase.auth.FacebookAuthProvider.PROVIDER_ID,
