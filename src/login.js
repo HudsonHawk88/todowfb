@@ -19,7 +19,7 @@ class Login extends Component {
 
   login() {
     var uiConfig ={
-    signInSuccessUrl: 'home.js',
+    signInSuccessUrl: 'index.html',
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
           firebase.auth.FacebookAuthProvider.PROVIDER_ID,
