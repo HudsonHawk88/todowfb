@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/todowfb/static/css/main.2cce8147.chunk.css",
+    "main.js": "/todowfb/static/js/main.7d846b59.chunk.js",
+    "main.js.map": "/todowfb/static/js/main.7d846b59.chunk.js.map",
+    "runtime~main.js": "/todowfb/static/js/runtime~main.15e6ff38.js",
+    "runtime~main.js.map": "/todowfb/static/js/runtime~main.15e6ff38.js.map",
+    "static/css/2.7c4efcaa.chunk.css": "/todowfb/static/css/2.7c4efcaa.chunk.css",
+    "static/js/2.1ac4afc9.chunk.js": "/todowfb/static/js/2.1ac4afc9.chunk.js",
+    "static/js/2.1ac4afc9.chunk.js.map": "/todowfb/static/js/2.1ac4afc9.chunk.js.map",
+    "index.html": "/todowfb/index.html",
+    "precache-manifest.6c24d42ad62b14c7009aa141d917d80b.js": "/todowfb/precache-manifest.6c24d42ad62b14c7009aa141d917d80b.js",
+    "service-worker.js": "/todowfb/service-worker.js",
+    "static/css/2.7c4efcaa.chunk.css.map": "/todowfb/static/css/2.7c4efcaa.chunk.css.map",
+    "static/css/main.2cce8147.chunk.css.map": "/todowfb/static/css/main.2cce8147.chunk.css.map"
+  }
+}
