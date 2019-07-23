@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase, { } from './config/Fire';
 import * as firebaseui from 'firebaseui';
-import Home from './home'
+
 
 class Login extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Login extends Component {
 
   login() {
     var uiConfig ={
-    signInSuccessUrl: 'index.html',
+    signInSuccessUrl: "/",
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
           firebase.auth.FacebookAuthProvider.PROVIDER_ID,
